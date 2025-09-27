@@ -1,11 +1,12 @@
 {
   "appname": "Catalyst League Task Helper",
-  "author": "[Your Name Here]",
+  "author": "Silentkipe",
   "description": "Helps track and filter your incomplete Catalyst League tasks.",
-  "appUrl": "https://[YourUsername].github.io/[YourRepoName]/",
-  "configUrl": "https://[YourUsername].github.io/[YourRepoName]/appconfig.json",
+  "appUrl": "https://Silentkipe.github.io/catapp/",
+  "configUrl": "https://Silentkipe.github.io/catapp/appconfig.json",
   "permissions": [
     "overlays"
   ],
   "minversion": "1.0.0"
 }
+
