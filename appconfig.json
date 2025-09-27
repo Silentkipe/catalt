@@ -1,8 +1,11 @@
 {
-  "name": "Catalyst League Task Helper",
-  "description": "Suggests uncompleted Catalyst League tasks sorted by popularity",
-  "url": "https://silentkipe.github.io/catalt/index.html",
-  "type": "webapp",
-  "version": "1.0",
-  "icon": "https://silentkipe.github.io/catalt/icon.png"
+  "appname": "Catalyst League Task Helper",
+  "author": "[Your Name Here]",
+  "description": "Helps track and filter your incomplete Catalyst League tasks.",
+  "appUrl": "https://[YourUsername].github.io/[YourRepoName]/",
+  "configUrl": "https://[YourUsername].github.io/[YourRepoName]/appconfig.json",
+  "permissions": [
+    "overlays"
+  ],
+  "minversion": "1.0.0"
 }
