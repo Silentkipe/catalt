@@ -1,116 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Catalyst League Task Helper</title>
-  <!-- FIX: Added Alt1 appconfig link for installation -->
-  <link rel="alt1 appconfig" href="https://silentkipe.github.io/catalt/appconfig.json">
+  <title>Buff Alert Pro</title>
+  <script src="https://alt1api.com/bundle.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; padding: 10px; background: #1e1e1e; color: white; }
-    input, select { margin: 5px 0; padding: 5px; width: 200px; }
-    .task { border-bottom: 1px solid #444; padding: 5px; cursor: pointer; }
-    .task:hover { background: #333; }
-    #details { margin-top: 15px; padding: 10px; border: 1px solid #555; background: #2b2b2b; }
-    #taskList { max-height: 400px; overflow-y: auto; border: 1px solid #555; padding: 5px; }
+    body { background:#111; color:white; font-family:sans-serif; padding:10px; }
+    .tab { cursor:pointer; padding:5px 10px; background:#333; display:inline-block; margin-right:5px; }
+    .tab.active { background:#666; }
+    .section { display:none; margin-top:10px; }
+    .section.active { display:block; }
+    .buff-row { border-bottom:1px solid #333; padding:4px; font-size:12px; }
+    .buff-row input[type=range] { width:120px; }
+    #tooltip {
+      position:fixed;
+      pointer-events:none;
+      background:rgba(0,0,0,0.6);
+      color:white;
+      padding:6px;
+      border-radius:6px;
+      font-size:12px;
+      display:none;
+    }
   </style>
 </head>
 <body>
-  <h2>Catalyst League Task Helper</h2>
 
-  <label>Enter your Wiki username:</label><br>
-  <input type="text" id="username" placeholder="Your Wiki username">
-  <button onclick="loadTasks()">Load Tasks</button>
+<h3>Buff & PvM Alert Pro</h3>
 
-  <br><label>Filter by type:</label><br>
-  <select id="typeFilter" onchange="applyFilter()">
-    <option value="All">All</option>
-    <option value="Combat">Combat</option>
-    <option value="Skilling">Skilling</option>
-    <option value="Exploration">Exploration</option>
-  </select>
+<div>
+  <span class="tab active" onclick="showTab('pvm')">PvM</span>
+  <span class="tab" onclick="showTab('skilling')">Skilling</span>
+</div>
 
-  <div id="taskList">Enter username and click Load Tasks</div>
-  <div id="details">Click a task for more info</div>
+<div>
+  <label><input type="checkbox" id="sound-enable" checked> Sound</label>
+  <input type="range" id="volume" min="0" max="100" value="50">
+  <label><input type="checkbox" id="tooltip-enable" checked> Tooltip</label>
+</div>
 
-  <script>
-    let allTasks = [];
-    let userDoneTasks = [];
+<div id="pvm" class="section active"></div>
+<div id="skilling" class="section"></div>
 
-    async function loadTasks() {
-      const username = document.getElementById("username").value.trim();
-      if(!username){ alert("Enter a Wiki username"); return; }
+<div id="tooltip"></div>
 
-      document.getElementById("taskList").innerHTML = "Loading tasks...";
-      allTasks = [];
-      userDoneTasks = [];
-
-      // Fetch all tasks from Wiki
-      const res = await fetch("https://runescape.wiki/api.php?action=parse&page=Catalyst_League/Tasks&format=json&origin=*");
-      const data = await res.json();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(data.parse.text["*"], "text/html");
-
-      let rows = doc.querySelectorAll("table.wikitable tr");
-      rows.forEach(row => {
-        let cols = row.querySelectorAll("td");
-        if(cols.length > 1){
-          allTasks.push({
-            name: cols[0].innerText.trim(),
-            description: cols[1].innerText.trim(),
-            requirements: cols[2]?.innerText.trim() || "None",
-            type: cols[3]?.innerText.trim() || "Unknown",
-            popularity: parseFloat(cols[4]?.innerText.replace("%","")) || 0
-          });
-        }
-      });
-
-      // Fetch user progress
-      const progressRes = await fetch(`https://runescape.wiki/api.php?action=parse&page=User:${username}/Catalyst_League_Progress&format=json&origin=*`);
-      const progressData = await progressRes.json();
-      const progressDoc = parser.parseFromString(progressData.parse.text["*"], "text/html");
-      progressDoc.querySelectorAll("li").forEach(li => {
-        userDoneTasks.push(li.innerText.trim());
-      });
-
-      applyFilter();
-    }
-
-    function applyFilter(){
-      const type = document.getElementById("typeFilter").value;
-      let filtered = allTasks.filter(t => !userDoneTasks.includes(t.name));
-      if(type !== "All") filtered = filtered.filter(t => t.type === type);
-
-      filtered.sort((a,b) => b.popularity - a.popularity);
-
-      showTasks(filtered);
-    }
-
-    function showTasks(tasks){
-      const container = document.getElementById("taskList");
-      container.innerHTML = "";
-      if(tasks.length===0){ container.innerHTML="No tasks to show"; return; }
-
-      tasks.forEach(task => {
-        const div = document.createElement("div");
-        div.className = "task";
-        div.innerText = `${task.name} (${task.popularity}%)`;
-        div.onclick = () => showDetails(task);
-        container.appendChild(div);
-      });
-    }
-
-    function showDetails(task){
-      document.getElementById("details").innerHTML = `
-        <h3>${task.name}</h3>
-        <p><b>Description:</b> ${task.description}</p>
-        <p><b>Requirements:</b> ${task.requirements}</p>
-        <p><b>Type:</b> ${task.type}</p>
-        <p><b>Popularity:</b> ${task.popularity}% of players completed</p>
-        <p><a href="https://runescape.wiki/w/Catalyst_League/Tasks" target="_blank">View on Wiki</a></p>`;
-    }
-  </script>
+<script src="app.js"></script>
 </body>
 </html>
-
-
-
-
