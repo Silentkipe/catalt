@@ -1,13 +1,10 @@
 {
-  "appname": "Catalyst League Task Helper",
-  "author": "Silentkipe",
-  "description": "Helps track and filter your incomplete Catalyst League tasks.",
-  "appUrl": "https://silentkipe.github.io/catalt/",
-  "configUrl": "https://silentkipe.github.io/catalt/appconfig.json",
-  "permissions": [
-    "overlays"
-  ],
-  "minversion": "1.0.0"
+  "name": "Buff & PvM Alert Pro",
+  "version": "1.0.0",
+  "description": "Automatic buff, debuff, HP and Prayer alerts with sound and tooltip overlay.",
+  "navbutton": true,
+  "permissions": ["screen", "overlay"],
+  "main": "index.html"
 }
 
 
